@@ -33,13 +33,10 @@ def recomendar_acoes(risco):
         cursos = ["Aprendizado Contínuo", "Autogestão de Carreira"]
     return acoes, cursos
 
-# Função principal do programa
-def main():
-    print("="*60)
-    print("Sistema de Bem-Estar e Futuro do Trabalho")
-    print("="*60)
+print("Bem-vindo(a) ao Sistema de Bem-Estar no Futuro do Trabalho ")
+print("Este programa vai ajudá-lo(a) a refletir sobre seu nível de bem-estar")
 
-while True:
+while True:       
         try:
            # Coleta o nome do usuário
             nome = input("\nDigite seu nome: ")
@@ -75,7 +72,4 @@ while True:
         if repetir != "s":
             print("\n Muito obrigado pela confiança. Cuide da sua saúde e continue aprendendo!")
             break 
-
-# Executa o programa principal
-if __name__ == "__main__":
-    main()        
+     
