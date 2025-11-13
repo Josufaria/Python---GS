@@ -73,7 +73,7 @@ while True:
         repetir = input("\nDeseja avaliar outro colaborador? (s/n): ").strip().lower()
         # Finaliza o programa
         if repetir != "s":
-            print("\n Programa encerrado. Cuide da sua saúde e continue aprendendo!")
+            print("\n Muito obrigado pela confiança. Cuide da sua saúde e continue aprendendo!")
             break 
 
 # Executa o programa principal
