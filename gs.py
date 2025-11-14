@@ -1,79 +1,206 @@
 # =====================================================================
-# Projeto: Monitoramento de Bem-Estar e Requalificação Profissional
+# Projeto: FutureWork Balance - Monitoramento de Bem-Estar e Requalificação no Futuro do Trabalho
 # Integrantes:
 # - Nome: Josué Faria da Silva – RM: 563819
 # - Nome: Julia Schiavi – RM: 562418
 # =====================================================================
 
-# Função que avalia o risco de burnout com base em estresse, sono e atividade física
+import os
+
+# Arquivo onde os resultados serão armazenados
+ARQUIVO_HISTORICO = "historico_bem_estar.txt"
+
+# Base de cursos do futuro 
+cursos_futuro = {
+    "ALTO": [
+        "Gestão do Estresse no Trabalho Digital",
+        "Saúde Mental e IA: Como usar tecnologia a seu favor",
+        "Mindfulness para Ambientes Remotos"
+    ],
+    "MÉDIO": [
+        "Produtividade Sustentável em Escritórios Híbridos",
+        "Organização Inteligente com Ferramentas de IA",
+        "Inteligência Emocional no Trabalho"
+    ],
+    "BAIXO": [
+        "Trabalhando com IA: Carreiras do Futuro",
+        "Autogestão de Carreira e Lifelong Learning",
+        "Criatividade e Resolução de Problemas"
+    ]
+}
+
+# Sistema de medalhas 
+def atribuir_medalha(risco):
+    if risco == "BAIXO":
+        return "🏅 Medalha de Bem-Estar Excelente"
+    elif risco == "MÉDIO":
+        return "🥈 Medalha de Equilíbrio Parcial"
+    else:
+        return "🥉 Medalha de Atenção Necessária"
+
+# IA baseada em regras + score
 def avaliar_bem_estar(estresse, sono, atividade):
-# Verifica alto risco: estresse alto e pouco sono
-    if estresse >= 7 and sono < 6:
+    score = 0
+
+    if estresse >= 7:
+        score += 3
+    elif estresse >= 5:
+        score += 2
+    else:
+        score += 1
+
+    if sono < 6:
+        score += 3
+    elif sono < 7:
+        score += 2
+    else:
+        score += 1
+
+    if atividade >= 4:
+        score -= 1
+    elif atividade == 0:
+        score += 2
+
+    if score >= 6:
         return "ALTO"
-# Verifica risco médio: estresse moderado ou sono insuficiente
-    elif estresse >= 5 or sono < 7:
+    elif score >= 4:
         return "MÉDIO"
-# Caso contrário, risco baixo    
     else:
         return "BAIXO"
-    
-# Função que retorna ações e cursos recomendados conforme o nível de risco    
+
+# Recomendações baseadas no risco
 def recomendar_acoes(risco):
-# Ações e cursos para risco alto
     if risco == "ALTO":
-        acoes = ["Agendar consulta psicológica", "Reduzir carga horária temporariamente"]
-        cursos = ["Gestão do Estresse", "Equilíbrio entre vida pessoal e trabalho"]
- # Ações e cursos para risco médio
+        acoes = ["Agendar apoio psicológico", "Reduzir carga horária temporariamente"]
     elif risco == "MÉDIO":
-        acoes = ["Fazer pausas durante o expediente", "Praticar atividade física leve"]
-        cursos = ["Mindfulness", "Inteligência emocional no trabalho"]
-# Ações e cursos para risco baixo
+        acoes = ["Realizar pausas durante o trabalho", "Praticar exercícios leves"]
     else:
-        acoes = ["Manter hábitos saudáveis", "Continuar rotina equilibrada"]
-        cursos = ["Aprendizado Contínuo", "Autogestão de Carreira"]
-    return acoes, cursos
+        acoes = ["Manter rotina saudável", "Continuar com equilíbrio pessoal"]
+    return acoes, cursos_futuro[risco]
 
-print("Bem-vindo(a) ao Sistema de Bem-Estar no Futuro do Trabalho ")
-print("Este programa vai ajudá-lo(a) a refletir sobre seu nível de bem-estar")
+# Registrar histórico em arquivo
+def salvar_historico(nome, risco):
+    with open(ARQUIVO_HISTORICO, "a", encoding="utf-8") as arquivo:
+        arquivo.write(f"{nome} - Risco: {risco}\n")
 
-while True:       
+# Mostrar histórico
+def mostrar_historico():
+    if not os.path.exists(ARQUIVO_HISTORICO):
+        print("\n📁 Nenhum histórico registrado ainda.")
+        return
+    
+    print("\n=== 📚 HISTÓRICO DE AVALIAÇÕES ===")
+    with open(ARQUIVO_HISTORICO, "r", encoding="utf-8") as arquivo:
+        print(arquivo.read())
+
+
+# ===========================
+# SISTEMA PRINCIPAL
+# ===========================
+
+print("🧠💻 Bem-vindo(a) ao FutureWork Balance ")
+print("Aqui, tecnologia e cuidado humano trabalham juntos para transformar o futuro do trabalho.\n")
+
+while True:
+
+    tentativas = 0  # contador de erros
+
+    #validação nome
     try:
-        # Coleta o nome do usuário com validação (somente letras e espaços)
         while True:
-            nome = input("\nDigite seu nome: ").strip()
-            if all(c.isalpha() or c.isspace() for c in nome) and nome != "":
+            nome = input("Digite seu nome: ").strip()
+
+            if nome.replace(" ", "").isalpha():
                 break
             else:
-                print("Por favor, digite um nome válido (apenas letras).")
+                tentativas += 1
+                print("❌ Digite um nome válido (somente letras).")
 
-        # Solicita dados com validação
-        estresse = int(input("Em uma escala de 0 a 10, qual seu nível de estresse? "))
-        sono = int(input("Quantas horas você dorme por noite (em média)? "))
-        atividade = int(input("Quantos dias por semana pratica atividade física? "))
+            if tentativas >= 3:
+                print("\n❌ Muitas tentativas inválidas. O sistema será encerrado.")
+                exit()
 
-        # Avalia o risco e obtém recomendações
+        while True:
+            #validação do nível de estresse
+            try:
+                estresse = int(input("Nível de estresse (0 a 10): "))
+                if 0 <= estresse <= 10:
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                tentativas += 1
+                print("⚠️ Digite um número válido entre 0 e 10.")
+
+            if tentativas >= 3:
+                print("\n❌ Muitas tentativas inválidas. O sistema será encerrado.")
+                exit()
+
+        
+        while True:
+            #validação das horas de sono
+            try:
+                sono = int(input("Horas de sono por noite: "))
+                if sono >= 0:
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                tentativas += 1
+                print("⚠️ Digite apenas números válidos e positivos.")
+
+            if tentativas >= 3:
+                print("\n❌ Muitas tentativas inválidas. O sistema será encerrado.")
+                exit()
+
+        
+        
+        while True:
+            #validação da atividade física
+            try:
+                atividade = int(input("Dias de atividade física por semana: "))
+                if atividade >= 0:
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                tentativas += 1
+                print("⚠️ Digite apenas números válidos e positivos.")
+
+            if tentativas >= 3:
+                print("\n❌ Muitas tentativas inválidas. O sistema será encerrado.")
+                exit()
+
+        # Avaliação final
         risco = avaliar_bem_estar(estresse, sono, atividade)
         acoes, cursos = recomendar_acoes(risco)
+        medalha = atribuir_medalha(risco)
 
-        # Exibe os resultados e recomendações
-        print("\n Resultado da Avaliação:")
+        print("\n✨ RESULTADO DA AVALIAÇÃO ✨")
         print(f"Nome: {nome}")
-        print(f"Nível de risco: {risco}")
-        print("\n Ações recomendadas:")
-        for acao in acoes:
-            print(f"- {acao}")
-        print("\n Cursos sugeridos:")
-        for curso in cursos:
-            print(f"- {curso}")
+        print(f"Risco detectado: {risco}")
+        print(f"Recompensa: {medalha}")
+
+        print("\n📌 Ações recomendadas:")
+        for a in acoes:
+            print(f"- {a}")
+
+        print("\n📚 Cursos sugeridos para o futuro do trabalho:")
+        for c in cursos:
+            print(f"- {c}")
+
+        salvar_historico(nome, risco)
+
+        ver = input("\nDeseja visualizar o histórico geral? (s/n): ").lower()
+        if ver == "s":
+            mostrar_historico()
 
     except ValueError:
-        # Exibe a mensagem de erro caso um número válido não seja digitado
-        print("\n Por favor, digite apenas números válidos nas perguntas!")
-        continue  # reinicia o loop
+        print("\n📢 Erro inesperado.")
+        continue
 
-    # Pergunta se o usuário quer repetir o processo
-    repetir = input("\nDeseja avaliar outro colaborador? (s/n): ").strip().lower()
-    # Finaliza o programa
+    repetir = input("\nDeseja avaliar outro colaborador? (s/n): ").lower()
     if repetir != "s":
-        print("\n Muito obrigado pela confiança. Cuide da sua saúde e continue aprendendo!")
-        break 
+        print("\n🌟 Obrigado por utilizar o FutureWork Balance!")
+        print("Lembre-se: o futuro do trabalho começa com o cuidado de hoje.\n")
+        break
