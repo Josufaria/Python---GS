@@ -1,6 +1,8 @@
 # 🧠💼 FutureWork Balance  
 ##  Sistema Inteligente de Monitoramento de Bem-Estar e Requalificação no Futuro do Trabalho  
 
+**👉 LINK VÍDEO EXPLICATIVO ->** [Click aqui para acessar ao código. ](COLOCAR LINK) 
+
 # 🎯 Sobre o Projeto  
 O **FutureWork Balance** é um sistema desenvolvido para avaliar o bem-estar de colaboradores no contexto do **Futuro do Trabalho**, unindo:
 
@@ -68,10 +70,22 @@ O código inclui as seguintes funções principais:
 
 - Pode ser integrado futuramente com dashboards ou APIs.
 
+# 📥 Como Executar  
+
+### **1. Pré-requisitos**
+- Python **3.8+**
+- Não requer bibliotecas externas
+
+### **2. Executar o programa**
+No terminal:
+- python futurework_balance.py
+
 ## 👩‍💻 Desenvolvedores 
- 
+
 - **Josué Faria da Silva** – RM: 563819  
-- **Julia Schiavi** – RM: 562418  
+- **Julia Schiavi** – RM: 562418 
+
+ 
 
 
 
